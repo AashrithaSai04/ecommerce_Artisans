@@ -33,7 +33,7 @@ const Navbar = () => {
           {/* Logo */}
           <Link to="/" className="nav-logo">
             <span className="logo-icon">🌾</span>
-            <span className="logo-text">Rural Marketplace</span>
+            <span className="logo-text">Ghao se Ghar thak</span>
           </Link>
 
           {/* Desktop Navigation */}

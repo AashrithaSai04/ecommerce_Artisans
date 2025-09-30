@@ -34,12 +34,13 @@ const Home = () => {
               <h1 className="hero-title">{t('hero.title')}</h1>
               <p className="hero-subtitle">{t('hero.subtitle')}</p>
               <div className="hero-actions">
-                <Link to="/products" className="btn btn-primary btn-lg">
+                <Link to="/products" className="btn btn-primary btn-outline btn-lg ">
                   {t('hero.cta')}
                 </Link>
-                <Link to="/register?role=seller" className="btn btn-outline btn-lg">
+                <Link to="/register?role=seller" className="btn btn-primary btn-outline btn-lg " style={{ color: "#white" }}>
                   {t('hero.becomeSellerCta')}
                 </Link>
+                
               </div>
             </div>
             <div className="hero-image">

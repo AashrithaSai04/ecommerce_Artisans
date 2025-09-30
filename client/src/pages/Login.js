@@ -181,19 +181,20 @@ const Login = () => {
               directly from farmers and artisans around the world.
             </p>
             <div className="auth-image-features">
-              <div className="feature-item">
-                <span className="feature-icon">🌱</span>
-                <span>Fresh & Organic</span>
-              </div>
-              <div className="feature-item">
-                <span className="feature-icon">🤝</span>
-                <span>Direct from Producers</span>
-              </div>
-              <div className="feature-item">
-                <span className="feature-icon">🌍</span>
-                <span>Global Marketplace</span>
-              </div>
-            </div>
+  <div className="feature-item">
+    <span className="feature-icon">🌱</span>
+    <span style={{ color: 'black' }}>Fresh & Organic</span>
+  </div>
+  <div className="feature-item">
+    <span className="feature-icon">🤝</span>
+    <span style={{ color: 'black' }}>Direct from Producers</span>
+  </div>
+  <div className="feature-item">
+    <span className="feature-icon">🌍</span>
+    <span style={{ color: 'black' }}>Global Marketplace</span>
+  </div>
+</div>
+
           </div>
         </div>
       </div>
