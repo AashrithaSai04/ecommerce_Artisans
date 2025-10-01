@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useReducer } from 'react';
+import { api } from '../services/api';
 
 // Initial state
 const initialState = {
@@ -103,6 +104,20 @@ export const AuthProvider = ({ children }) => {
     dispatch({ type: AUTH_ACTIONS.LOGIN_SUCCESS, payload: user });
   };
 
+  const register = async (userData) => {
+    dispatch({ type: AUTH_ACTIONS.LOGIN_START });
+    try {
+      const { data } = await api.post('/auth/register', userData);
+      // Assuming the backend returns the same structure as login
+      login(data.user, data.token);
+      return { success: true };
+    } catch (err) {
+      const errorPayload = err.response?.data?.message || 'Registration failed';
+      dispatch({ type: AUTH_ACTIONS.LOGIN_FAILURE, payload: errorPayload });
+      return { success: false, error: errorPayload };
+    }
+  };
+
   const logout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
@@ -130,6 +145,7 @@ export const AuthProvider = ({ children }) => {
   const value = {
     ...state,
     login,
+    register,
     logout,
     setLoading,
     setError,

@@ -1,82 +1,192 @@
 const Product = require('../models/Product');
 const User = require('../models/User');
 
-// @desc    Get all products
+// @desc    Get all products with advanced filtering
 // @route   GET /api/products
 // @access  Public
 exports.getProducts = async (req, res, next) => {
   try {
-    let query;
+    const {
+      search,
+      category,
+      priceMin,
+      priceMax,
+      rating,
+      location,
+      craftSpecialty,
+      materials,
+      availability,
+      customizable,
+      page = 1,
+      limit = 20,
+      sort = 'newest',
+      artisan
+    } = req.query;
 
-    // Copy req.query
-    const reqQuery = { ...req.query };
+    // Build base query
+    let baseQuery = { isActive: true };
 
-    // Fields to exclude
-    const removeFields = ['select', 'sort', 'page', 'limit'];
+    // Text search across name, description, and tags
+    if (search) {
+      baseQuery.$or = [
+        { name: { $regex: search, $options: 'i' } },
+        { description: { $regex: search, $options: 'i' } },
+        { tags: { $in: [new RegExp(search, 'i')] } },
+        { 'specifications.materials': { $in: [new RegExp(search, 'i')] } }
+      ];
+    }
 
-    // Loop over removeFields and delete them from reqQuery
-    removeFields.forEach(param => delete reqQuery[param]);
+    // Category filtering
+    if (category) {
+      baseQuery.category = category;
+    }
 
-    // Create query string
-    let queryStr = JSON.stringify(reqQuery);
+    // Price range filtering
+    if (priceMin || priceMax) {
+      baseQuery.price = {};
+      if (priceMin) baseQuery.price.$gte = parseFloat(priceMin);
+      if (priceMax) baseQuery.price.$lte = parseFloat(priceMax);
+    }
 
-    // Create operators ($gt, $gte, etc)
-    queryStr = queryStr.replace(/\b(gt|gte|lt|lte|in)\b/g, match => `$${match}`);
+    // Rating filtering
+    if (rating) {
+      baseQuery['ratings.average'] = { $gte: parseFloat(rating) };
+    }
 
-    // Finding resource
-    query = Product.find(JSON.parse(queryStr)).populate({
-      path: 'seller',
-      select: 'name sellerInfo profile'
+    // Availability filtering
+    if (availability) {
+      baseQuery.availability = availability;
+    }
+
+    // Customizable filtering
+    if (customizable === 'true') {
+      baseQuery.customizable = true;
+    }
+
+    // Materials filtering
+    if (materials) {
+      const materialArray = materials.split(',');
+      baseQuery['specifications.materials'] = { $in: materialArray };
+    }
+
+    // Artisan filtering
+    if (artisan) {
+      baseQuery.seller = artisan;
+    }
+
+    // Build aggregation pipeline for location and craft specialty filtering
+    let pipeline = [{ $match: baseQuery }];
+
+    // Add seller lookup for location and craft specialty filtering
+    pipeline.push({
+      $lookup: {
+        from: 'users',
+        localField: 'seller',
+        foreignField: '_id',
+        as: 'seller'
+      }
     });
 
-    // Select Fields
-    if (req.query.select) {
-      const fields = req.query.select.split(',').join(' ');
-      query = query.select(fields);
+    pipeline.push({ $unwind: '$seller' });
+
+    // Location filtering (by seller's location)
+    if (location) {
+      pipeline.push({
+        $match: {
+          $or: [
+            { 'seller.profile.address.city': { $regex: location, $options: 'i' } },
+            { 'seller.profile.address.state': { $regex: location, $options: 'i' } }
+          ]
+        }
+      });
     }
 
-    // Sort
-    if (req.query.sort) {
-      const sortBy = req.query.sort.split(',').join(' ');
-      query = query.sort(sortBy);
-    } else {
-      query = query.sort('-createdAt');
+    // Craft specialty filtering
+    if (craftSpecialty) {
+      pipeline.push({
+        $match: {
+          'seller.artisanInfo.craftSpecialties': { $in: [craftSpecialty] }
+        }
+      });
     }
 
-    // Pagination
-    const page = parseInt(req.query.page, 10) || 1;
-    const limit = parseInt(req.query.limit, 10) || 25;
-    const startIndex = (page - 1) * limit;
-    const endIndex = page * limit;
-    const total = await Product.countDocuments(JSON.parse(queryStr));
+    // Add sorting
+    let sortOption = {};
+    switch (sort) {
+      case 'price-low':
+        sortOption = { price: 1 };
+        break;
+      case 'price-high':
+        sortOption = { price: -1 };
+        break;
+      case 'rating':
+        sortOption = { 'ratings.average': -1 };
+        break;
+      case 'popular':
+        sortOption = { 'ratings.count': -1, viewCount: -1 };
+        break;
+      case 'newest':
+      default:
+        sortOption = { createdAt: -1 };
+        break;
+    }
 
-    query = query.skip(startIndex).limit(limit);
+    pipeline.push({ $sort: sortOption });
 
-    // Executing query
-    const products = await query;
+    // Get total count for pagination
+    const countPipeline = [...pipeline];
+    countPipeline.push({ $count: 'total' });
+    const totalResult = await Product.aggregate(countPipeline);
+    const totalCount = totalResult[0]?.total || 0;
+
+    // Add pagination
+    const skip = (parseInt(page) - 1) * parseInt(limit);
+    pipeline.push({ $skip: skip });
+    pipeline.push({ $limit: parseInt(limit) });
+
+    // Select specific fields
+    pipeline.push({
+      $project: {
+        name: 1,
+        description: 1,
+        price: 1,
+        category: 1,
+        images: 1,
+        'inventory.quantity': 1,
+        'inventory.unit': 1,
+        'inventory.inStock': 1,
+        ratings: 1,
+        tags: 1,
+        specifications: 1,
+        availability: 1,
+        customizable: 1,
+        viewCount: 1,
+        wishlistCount: 1,
+        createdAt: 1,
+        'seller._id': 1,
+        'seller.name': 1,
+        'seller.artisanInfo.shopName': 1,
+        'seller.artisanInfo.rating': 1,
+        'seller.artisanInfo.verified': 1,
+        'seller.profile.address.city': 1,
+        'seller.profile.address.state': 1
+      }
+    });
+
+    const productResults = await Product.aggregate(pipeline);
 
     // Pagination result
-    const pagination = {};
-
-    if (endIndex < total) {
-      pagination.next = {
-        page: page + 1,
-        limit
-      };
-    }
-
-    if (startIndex > 0) {
-      pagination.prev = {
-        page: page - 1,
-        limit
-      };
-    }
+    const paginationInfo = {
+      current: parseInt(page),
+      pages: Math.ceil(totalCount / parseInt(limit)),
+      total: totalCount
+    };
 
     res.status(200).json({
       success: true,
-      count: products.length,
-      pagination,
-      data: products
+      count: productResults.length,
+      pagination: paginationInfo,
+      data: productResults
     });
   } catch (error) {
     console.error(error);
@@ -322,6 +432,26 @@ exports.searchProducts = async (req, res, next) => {
     res.status(500).json({
       success: false,
       message: 'Server error'
+    });
+  }
+};
+
+// @desc    Get all product categories
+// @route   GET /api/products/categories
+// @access  Public
+exports.getCategories = async (req, res, next) => {
+  try {
+    const categories = await Product.distinct('category');
+    res.status(200).json({
+      success: true,
+      count: categories.length,
+      data: categories,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: 'Server error',
     });
   }
 };

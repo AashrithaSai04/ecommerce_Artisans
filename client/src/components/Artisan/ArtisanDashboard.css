@@ -1,0 +1,386 @@
+.artisan-dashboard {
+  padding: 20px;
+  max-width: 1400px;
+  margin: 0 auto;
+  background-color: #f8f9fa;
+  min-height: 100vh;
+}
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 30px;
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.artisan-info h1 {
+  margin: 0 0 10px 0;
+  color: #2c3e50;
+  font-size: 28px;
+  font-weight: 600;
+}
+
+.shop-info h2 {
+  margin: 0 0 15px 0;
+  color: #34495e;
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.artisan-badges {
+  display: flex;
+  gap: 10px;
+}
+
+.badge {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.badge.verified {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.badge.rating {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.quick-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.btn-primary, .btn-secondary, .btn-outline {
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.btn-primary {
+  background-color: #007bff;
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+}
+
+.btn-secondary {
+  background-color: #6c757d;
+  color: white;
+}
+
+.btn-secondary:hover {
+  background-color: #545b62;
+}
+
+.btn-outline {
+  background-color: transparent;
+  color: #007bff;
+  border: 2px solid #007bff;
+}
+
+.btn-outline:hover {
+  background-color: #007bff;
+  color: white;
+}
+
+.dashboard-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.stat-card {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  transition: transform 0.3s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+}
+
+.stat-card.pending {
+  border-left: 4px solid #ffc107;
+}
+
+.stat-icon {
+  font-size: 32px;
+  opacity: 0.7;
+}
+
+.stat-content h3 {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 700;
+  color: #2c3e50;
+}
+
+.stat-content p {
+  margin: 5px 0 0 0;
+  color: #6c757d;
+  font-size: 14px;
+}
+
+.dashboard-content {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 30px;
+}
+
+.section {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #e9ecef;
+  padding-bottom: 15px;
+}
+
+.section-header h3 {
+  margin: 0;
+  color: #2c3e50;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.view-all {
+  color: #007bff;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.view-all:hover {
+  text-decoration: underline;
+}
+
+.orders-list, .low-stock-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.order-item {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  align-items: center;
+  padding: 12px;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+}
+
+.order-item:hover {
+  background-color: #f8f9fa;
+}
+
+.order-info .order-number {
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.order-info .customer-name {
+  color: #6c757d;
+  font-size: 14px;
+}
+
+.order-info .order-date {
+  color: #6c757d;
+  font-size: 12px;
+}
+
+.order-status .status {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+.status.pending {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.status.confirmed {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.status.shipped {
+  background-color: #cce7ff;
+  color: #004085;
+}
+
+.order-total {
+  text-align: right;
+  font-weight: 600;
+  color: #28a745;
+}
+
+.low-stock-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+}
+
+.stock-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.stock-status.low {
+  background-color: #f8d7da;
+  color: #721c24;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.period-selector {
+  padding: 6px 12px;
+  border: 1px solid #ced4da;
+  border-radius: 6px;
+  font-size: 14px;
+  background-color: white;
+}
+
+.chart-placeholder {
+  text-align: center;
+  padding: 40px;
+  color: #6c757d;
+  border: 2px dashed #dee2e6;
+  border-radius: 8px;
+}
+
+.chart-summary {
+  margin-top: 15px;
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+}
+
+.chart-summary p {
+  margin: 0;
+  font-weight: 500;
+  color: #495057;
+}
+
+.top-products-list, .monthly-earnings {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.product-performance-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border: 1px solid #e9ecef;
+  border-radius: 6px;
+}
+
+.performance-stats {
+  display: flex;
+  gap: 15px;
+  font-size: 14px;
+  color: #6c757d;
+}
+
+.earning-item {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px;
+  padding: 10px;
+  border: 1px solid #e9ecef;
+  border-radius: 6px;
+  text-align: center;
+}
+
+.earning-item .month {
+  font-weight: 500;
+  color: #495057;
+}
+
+.earning-item .amount {
+  font-weight: 600;
+  color: #28a745;
+}
+
+.earning-item .orders {
+  font-size: 14px;
+  color: #6c757d;
+}
+
+.dashboard-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50vh;
+  font-size: 18px;
+  color: #6c757d;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .dashboard-header {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .quick-actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .dashboard-content {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-stats {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  }
+
+  .order-item {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .earning-item {
+    grid-template-columns: 1fr;
+    text-align: left;
+  }
+}

@@ -1,0 +1,147 @@
+/* Sellers Page Styles */
+.sellers-page {
+  padding: 3rem 0;
+  background-color: #f9f9f9;
+}
+
+.page-title {
+  text-align: center;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #2c3e50;
+  margin-bottom: 0.5rem;
+}
+
+.page-subtitle {
+  text-align: center;
+  font-size: 1.1rem;
+  color: #666;
+  margin-bottom: 3rem;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Artisan Grid */
+.artisan-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 2rem;
+}
+
+/* Artisan Card */
+.artisan-card {
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  overflow: hidden;
+}
+
+.artisan-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+.artisan-link {
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* Artisan Avatar */
+.artisan-avatar {
+  height: 200px;
+  background-color: #e9ecef;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.artisan-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.artisan-card:hover .artisan-avatar img {
+  transform: scale(1.05);
+}
+
+.avatar-placeholder {
+  font-size: 4rem;
+  font-weight: 700;
+  color: #adb5bd;
+}
+
+/* Artisan Info */
+.artisan-info {
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.artisan-name {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #34495e;
+  margin: 0 0 0.5rem;
+}
+
+.artisan-specialty {
+  font-size: 0.9rem;
+  color: #7f8c8d;
+  margin: 0;
+}
+
+/* Loading and Error States */
+.loading-state,
+.error-message,
+.empty-state {
+  text-align: center;
+  padding: 4rem 1rem;
+  color: #666;
+}
+
+.loading-state {
+  font-size: 1.2rem;
+}
+
+.error-message {
+  color: #e74c3c;
+  font-weight: 500;
+}
+
+.empty-state h3 {
+  font-size: 1.5rem;
+  color: #555;
+  margin-bottom: 0.5rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .page-title {
+    font-size: 2rem;
+  }
+
+  .artisan-grid {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  }
+}
+
+@media (max-width: 480px) {
+  .sellers-page {
+    padding: 2rem 0;
+  }
+
+  .artisan-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .artisan-info {
+    padding: 1rem;
+  }
+}

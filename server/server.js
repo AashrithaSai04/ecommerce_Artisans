@@ -17,6 +17,8 @@ const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/users');
 const productRoutes = require('./routes/products');
 const orderRoutes = require('./routes/orders');
+const artisanRoutes = require('./routes/artisan');
+const customerRoutes = require('./routes/customer');
 
 // Import middleware
 const errorHandler = require('./middleware/error');
@@ -57,6 +59,8 @@ app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/orders', orderRoutes);
+app.use('/api/artisan', artisanRoutes);
+app.use('/api/customer', customerRoutes);
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {

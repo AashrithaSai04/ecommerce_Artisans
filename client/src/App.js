@@ -15,14 +15,17 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Products from './pages/Products';
+import Sellers from './pages/Sellers';
+
+// Seller Components
+import SellerDashboard from './components/Seller/SellerDashboard';
+
 // import ProductDetail from './pages/ProductDetail';
 // import Cart from './pages/Cart';
 // import Checkout from './pages/Checkout';
 // import Orders from './pages/Orders';
 // import Profile from './pages/Profile';
-// import SellerDashboard from './pages/SellerDashboard';
 // import Sellers from './pages/Sellers';
-// import SellerProfile from './pages/SellerProfile';
 
 function App() {
   return (
@@ -36,10 +39,20 @@ function App() {
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               <Route path="/products" element={<Products />} />
+              <Route path="/sellers" element={<Sellers />} />
+              
+              {/* Seller Dashboard Routes */}
+              <Route 
+                path="/seller/*" 
+                element={
+                  <ProtectedRoute roles={['artisan', 'admin']}>
+                    <SellerDashboard />
+                  </ProtectedRoute>
+                } 
+              />
               
               {/* Temporarily commented out until pages are created */}
               {/* <Route path="/products/:id" element={<ProductDetail />} /> */}
-              {/* <Route path="/sellers" element={<Sellers />} /> */}
               {/* <Route path="/sellers/:id" element={<SellerProfile />} /> */}
               
               {/* Protected Routes - Temporarily commented out */}

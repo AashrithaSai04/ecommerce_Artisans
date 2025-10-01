@@ -5,6 +5,7 @@ const {
   createUser,
   updateUser,
   deleteUser,
+  getArtisans,
   getSellers,
   getSeller,
   updateSellerProfile,
@@ -16,6 +17,9 @@ const { protect, authorize } = require('../middleware/auth');
 const { uploadAvatar: uploadAvatarMiddleware, handleMulterError } = require('../middleware/upload');
 
 const router = express.Router();
+
+// Public routes
+router.get('/artisans', getArtisans);
 
 // Public seller routes
 router.get('/sellers', getSellers);

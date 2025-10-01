@@ -260,3 +260,56 @@ exports.uploadAvatar = async (req, res, next) => {
     });
   }
 };
+
+// @desc    Get all artisan users
+// @route   GET /api/users/artisans
+// @access  Public
+exports.getArtisans = async (req, res, next) => {
+  try {
+    const artisans = await User.find({ role: 'artisan' }).select(
+      '-password -email'
+    );
+
+    res.status(200).json({
+      success: true,
+      count: artisans.length,
+      data: artisans,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: 'Server error',
+    });
+  }
+};
+
+// @desc    Get public profile for a single artisan
+// @route   GET /api/users/artisans/:id
+// @access  Public
+exports.getArtisanProfile = async (req, res, next) => {
+  try {
+    const artisan = await User.findOne({
+      _id: req.params.id,
+      role: 'artisan'
+    }).select('-password -email');
+
+    if (!artisan) {
+      return res.status(404).json({
+        success: false,
+        message: 'Artisan not found'
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      data: artisan
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: 'Server error'
+    });
+  }
+};

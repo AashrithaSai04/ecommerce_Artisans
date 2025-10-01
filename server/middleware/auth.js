@@ -61,12 +61,23 @@ exports.authorize = (...roles) => {
   };
 };
 
-// Check if user is seller
-exports.isSeller = (req, res, next) => {
-  if (req.user.role !== 'seller' && req.user.role !== 'admin') {
+// Check if user is artisan
+exports.isArtisan = (req, res, next) => {
+  if (req.user.role !== 'artisan' && req.user.role !== 'admin') {
     return res.status(403).json({
       success: false,
-      message: 'Access denied. Seller account required.'
+      message: 'Access denied. Artisan account required.'
+    });
+  }
+  next();
+};
+
+// Check if user is customer
+exports.isCustomer = (req, res, next) => {
+  if (req.user.role !== 'customer' && req.user.role !== 'admin') {
+    return res.status(403).json({
+      success: false,
+      message: 'Access denied. Customer account required.'
     });
   }
   next();

@@ -67,14 +67,17 @@ const orderSchema = new mongoose.Schema({
     method: {
       type: String,
       required: true,
-      enum: ['credit_card', 'debit_card', 'paypal', 'bank_transfer', 'cash_on_delivery']
+      enum: ['upi', 'bank_transfer', 'credit_card', 'debit_card', 'digital_wallet', 'cash_on_delivery']
     },
     transactionId: String,
+    upiId: String,
     status: {
       type: String,
-      enum: ['pending', 'completed', 'failed', 'refunded'],
+      enum: ['pending', 'completed', 'failed', 'refunded', 'partially_refunded'],
       default: 'pending'
-    }
+    },
+    paymentGateway: String,
+    paidAt: Date
   },
   orderSummary: {
     subtotal: {
@@ -96,13 +99,71 @@ const orderSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ['pending', 'confirmed', 'processing', 'shipped', 'delivered', 'cancelled', 'refunded'],
+    enum: [
+      'pending',
+      'confirmed', 
+      'artisan-accepted',
+      'in-production',
+      'ready-to-ship',
+      'shipped',
+      'out-for-delivery',
+      'delivered',
+      'cancelled',
+      'refunded',
+      'return-requested',
+      'return-approved',
+      'returned'
+    ],
     default: 'pending'
   },
+  
+  // Enhanced tracking for artisan marketplace
+  artisanResponse: {
+    accepted: Boolean,
+    acceptedAt: Date,
+    rejectedAt: Date,
+    rejectionReason: String,
+    estimatedCompletionDate: Date,
+    notes: String
+  },
+  
+  // Production tracking for handmade items
+  productionInfo: {
+    startedAt: Date,
+    expectedCompletionDate: Date,
+    actualCompletionDate: Date,
+    progressUpdates: [{
+      stage: String,
+      description: String,
+      images: [String],
+      completedAt: Date
+    }]
+  },
+  
   trackingInfo: {
     trackingNumber: String,
     carrier: String,
-    estimatedDelivery: Date
+    estimatedDelivery: Date,
+    actualDelivery: Date,
+    deliveryAttempts: [{
+      attemptDate: Date,
+      status: String,
+      note: String
+    }]
+  },
+  
+  // Return/Refund information
+  returnInfo: {
+    requested: Boolean,
+    requestedAt: Date,
+    reason: String,
+    status: {
+      type: String,
+      enum: ['requested', 'approved', 'rejected', 'picked-up', 'received', 'refunded']
+    },
+    refundAmount: Number,
+    refundedAt: Date,
+    pickupScheduled: Date
   },
   orderHistory: [{
     status: String,

@@ -1,4 +1,4 @@
-import api from './api';
+import { api } from './api';
 
 // Export individual functions
 export const getProducts = async (params = {}) => {

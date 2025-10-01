@@ -47,7 +47,9 @@ const Products = () => {
     try {
       setLoading(true);
       const response = await getProducts(filters);
-      setProducts(response.data.products || []);
+      // Check if response has a 'products' property, otherwise assume response is the array.
+      const productsData = response.products || (Array.isArray(response) ? response : []);
+      setProducts(productsData);
       setError('');
     } catch (err) {
       setError('Failed to load products. Please try again.');
@@ -60,7 +62,9 @@ const Products = () => {
   const fetchCategories = async () => {
     try {
       const response = await getCategories();
-      setCategories(response.data || []);
+      // Check if response has a 'data' property, otherwise assume response is the array.
+      const categoriesData = response.data || (Array.isArray(response) ? response : []);
+      setCategories(categoriesData);
     } catch (err) {
       console.error('Error fetching categories:', err);
     }

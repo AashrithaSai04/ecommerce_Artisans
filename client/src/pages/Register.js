@@ -287,18 +287,18 @@ const Register = () => {
                 <div className="role-option">
                   <input
                     type="radio"
-                    id="seller"
+                    id="artisan"
                     name="role"
-                    value="seller"
-                    checked={formData.role === 'seller'}
+                    value="artisan"
+                    checked={formData.role === 'artisan'}
                     onChange={handleChange}
                     className="role-input"
                     disabled={loading}
                   />
-                  <label htmlFor="seller" className="role-label">
-                    <span className="role-icon">🌾</span>
+                  <label htmlFor="artisan" className="role-label">
+                    <span className="role-icon">�</span>
                     <div>
-                      <div className="role-name">{t('auth.seller')}</div>
+                      <div className="role-name">{t('auth.artisan')}</div>
                       <div className="role-description">
                         Sell your products
                       </div>

@@ -75,9 +75,9 @@ const Navbar = () => {
                     <Link to="/profile" className="dropdown-item">
                       {t('nav.profile')}
                     </Link>
-                    {(user?.role === 'seller' || user?.role === 'admin') && (
-                      <Link to="/dashboard" className="dropdown-item">
-                        {t('nav.dashboard')}
+                    {(user?.role === 'artisan' || user?.role === 'admin') && (
+                      <Link to="/seller/dashboard" className="dropdown-item">
+                        🎨 Seller Dashboard
                       </Link>
                     )}
                     <Link to="/orders" className="dropdown-item">

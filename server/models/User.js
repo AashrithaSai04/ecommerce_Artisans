@@ -24,7 +24,7 @@ const userSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ['customer', 'seller', 'admin'],
+    enum: ['customer', 'artisan', 'admin'],
     default: 'customer'
   },
   profile: {
@@ -37,31 +37,77 @@ const userSchema = new mongoose.Schema({
       city: String,
       state: String,
       zipCode: String,
-      country: String
+      country: String,
+      coordinates: {
+        lat: Number,
+        lng: Number
+      }
     },
     bio: {
       type: String,
-      maxLength: [500, 'Bio cannot be more than 500 characters']
+      maxLength: [1000, 'Bio cannot be more than 1000 characters']
     },
     avatar: String,
     language: {
       type: String,
-      enum: ['en', 'es', 'fr', 'hi', 'zh'],
+      enum: ['en', 'hi', 'te', 'bn', 'ta', 'mr', 'gu', 'ur', 'kn', 'ml'],
       default: 'en'
+    },
+    dateOfBirth: Date,
+    gender: {
+      type: String,
+      enum: ['male', 'female', 'other', 'prefer-not-to-say']
     }
   },
-  sellerInfo: {
-    businessName: String,
-    businessType: {
+  // Enhanced Artisan/Seller Information
+  artisanInfo: {
+    shopName: String,
+    craftSpecialties: [{
       type: String,
-      enum: ['farmer', 'artisan', 'producer', 'other']
+      enum: [
+        'pottery', 'weaving', 'woodwork', 'metalwork', 'jewelry', 
+        'textiles', 'embroidery', 'painting', 'sculpture', 'leather-work',
+        'bamboo-craft', 'stone-carving', 'glass-work', 'paper-craft',
+        'handloom', 'block-printing', 'organic-farming', 'food-processing'
+      ]
+    }],
+    story: {
+      type: String,
+      maxLength: [2000, 'Story cannot be more than 2000 characters']
     },
-    description: String,
-    specialties: [String],
+    experience: {
+      years: {
+        type: Number,
+        min: 0
+      },
+      description: String
+    },
+    certifications: [{
+      name: String,
+      issuedBy: String,
+      issuedDate: Date,
+      document: String // URL to certificate document
+    }],
+    workshopImages: [String],
+    awards: [{
+      title: String,
+      year: Number,
+      description: String
+    }],
+    techniques: [String],
+    materials: [String],
     verified: {
       type: Boolean,
       default: false
     },
+    verificationDocuments: [{
+      type: String,
+      url: String,
+      uploadedAt: {
+        type: Date,
+        default: Date.now
+      }
+    }],
     rating: {
       type: Number,
       default: 0,
@@ -71,7 +117,80 @@ const userSchema = new mongoose.Schema({
     totalRatings: {
       type: Number,
       default: 0
+    },
+    totalSales: {
+      type: Number,
+      default: 0
+    },
+    totalEarnings: {
+      type: Number,
+      default: 0
+    },
+    // Payment Information
+    paymentInfo: {
+      bankName: String,
+      accountNumber: String,
+      ifscCode: String,
+      accountHolderName: String,
+      upiId: String,
+      verified: {
+        type: Boolean,
+        default: false
+      }
+    },
+    // Business Settings
+    businessSettings: {
+      acceptCustomOrders: {
+        type: Boolean,
+        default: true
+      },
+      minimumOrderValue: {
+        type: Number,
+        default: 0
+      },
+      processingTime: {
+        type: String,
+        default: '3-5 days'
+      },
+      shippingPolicy: String,
+      returnPolicy: String,
+      workingHours: {
+        start: String,
+        end: String,
+        workingDays: [String]
+      }
     }
+  },
+  // Customer-specific information
+  customerInfo: {
+    wishlist: [{
+      type: mongoose.Schema.ObjectId,
+      ref: 'Product'
+    }],
+    preferences: {
+      categories: [String],
+      priceRange: {
+        min: Number,
+        max: Number
+      },
+      preferredArtisans: [{
+        type: mongoose.Schema.ObjectId,
+        ref: 'User'
+      }]
+    },
+    deliveryAddresses: [{
+      name: String,
+      phone: String,
+      street: String,
+      city: String,
+      state: String,
+      zipCode: String,
+      country: String,
+      isDefault: {
+        type: Boolean,
+        default: false
+      }
+    }]
   },
   isActive: {
     type: Boolean,

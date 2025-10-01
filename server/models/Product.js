@@ -20,21 +20,27 @@ const productSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Please add a category'],
     enum: [
-      'fresh-food',
-      'vegetables',
-      'fruits',
-      'grains',
-      'dairy',
-      'meat',
-      'handmade-crafts',
-      'textiles',
       'pottery',
-      'jewelry',
+      'weaving', 
       'woodwork',
-      'local-art',
-      'paintings',
-      'sculptures',
-      'photography',
+      'metalwork',
+      'jewelry',
+      'textiles',
+      'embroidery',
+      'painting',
+      'sculpture',
+      'leather-work',
+      'bamboo-craft',
+      'stone-carving',
+      'glass-work',
+      'paper-craft',
+      'handloom',
+      'block-printing',
+      'organic-produce',
+      'processed-foods',
+      'home-decor',
+      'traditional-wear',
+      'accessories',
       'other'
     ]
   },
@@ -69,11 +75,33 @@ const productSchema = new mongoose.Schema({
   },
   specifications: {
     weight: String,
-    dimensions: String,
-    material: String,
-    origin: String,
-    organic: Boolean,
-    handmade: Boolean
+    dimensions: {
+      length: String,
+      width: String,
+      height: String
+    },
+    materials: [String],
+    techniques: [String],
+    origin: {
+      village: String,
+      district: String,
+      state: String
+    },
+    colors: [String],
+    patterns: [String],
+    isOrganic: Boolean,
+    isHandmade: {
+      type: Boolean,
+      default: true
+    },
+    isFairTrade: Boolean,
+    timeToMake: String, // e.g., "2-3 days", "1 week"
+    skillLevel: {
+      type: String,
+      enum: ['beginner', 'intermediate', 'advanced', 'master']
+    },
+    culturalSignificance: String,
+    careInstructions: String
   },
   shipping: {
     weight: Number,
@@ -113,23 +141,77 @@ const productSchema = new mongoose.Schema({
     type: Boolean,
     default: true
   },
+  // Customization options
+  customizable: {
+    type: Boolean,
+    default: false
+  },
+  customizationOptions: [{
+    name: String, // e.g., "Color", "Size", "Pattern"
+    type: {
+      type: String,
+      enum: ['text', 'color', 'size', 'dropdown', 'checkbox']
+    },
+    options: [String], // Available options for dropdown/checkbox
+    required: Boolean,
+    additionalCost: Number
+  }],
+  
+  // Availability and timing
+  availability: {
+    type: String,
+    enum: ['in-stock', 'made-to-order', 'pre-order', 'out-of-stock'],
+    default: 'in-stock'
+  },
+  leadTime: String, // For made-to-order items
+  
+  // Reviews and ratings
+  reviews: [{
+    type: mongoose.Schema.ObjectId,
+    ref: 'Review'
+  }],
+  
+  // Related products
+  relatedProducts: [{
+    type: mongoose.Schema.ObjectId,
+    ref: 'Product'
+  }],
+  
+  // SEO and discoverability
+  seoKeywords: [String],
+  searchTags: [String],
+  
+  // Multilingual support
   translations: {
-    es: {
-      name: String,
-      description: String
-    },
-    fr: {
-      name: String,
-      description: String
-    },
     hi: {
       name: String,
-      description: String
+      description: String,
+      tags: [String]
     },
-    zh: {
+    te: {
       name: String,
-      description: String
+      description: String,
+      tags: [String]
+    },
+    bn: {
+      name: String,
+      description: String,
+      tags: [String]
     }
+  },
+  
+  // Analytics
+  viewCount: {
+    type: Number,
+    default: 0
+  },
+  wishlistCount: {
+    type: Number,
+    default: 0
+  },
+  shareCount: {
+    type: Number,
+    default: 0
   },
   createdAt: {
     type: Date,
